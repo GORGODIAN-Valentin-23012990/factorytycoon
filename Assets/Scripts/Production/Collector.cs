@@ -16,4 +16,5 @@ public class Collector : MonoBehaviour
         if (wallet) wallet.Add(coin.value);
         Destroy(other.gameObject);
     }
+    public void SetWallet(Wallet w) => wallet = w;
 }
