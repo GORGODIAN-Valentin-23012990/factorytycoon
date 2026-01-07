@@ -160,6 +160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6805913503430341790}
+  - component: {fileID: 6761562452253476531}
   m_Layer: 0
   m_Name: GeneratorModule
   m_TagString: Untagged
@@ -186,6 +187,24 @@ Transform:
   - {fileID: 7351444894084347440}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6761562452253476531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6134760532893685486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18271dedcf595404bac604665ed47d3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropper: {fileID: 2586224212488826264}
+  conveyor: {fileID: 6363977216609660203}
+  collector: {fileID: 1558919718357959095}
+  coinPrefab: {fileID: 0}
+  dropRate: 1
+  conveyorForce: 5
 --- !u!1 &7669690390882950336
 GameObject:
   m_ObjectHideFlags: 0

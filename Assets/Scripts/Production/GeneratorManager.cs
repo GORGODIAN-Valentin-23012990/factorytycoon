@@ -7,7 +7,7 @@ public class GeneratorManager : MonoBehaviour
     [Header("Modules dans l’ordre de déblocage")]
     public GeneratorModule[] modules;
 
-    [Header("Tiers (même taille que modules)")]
+    [Header("Tiers")]
     public GameObject[] coinTiers;
     public float[] dropRates;
     public float[] conveyorForces;
