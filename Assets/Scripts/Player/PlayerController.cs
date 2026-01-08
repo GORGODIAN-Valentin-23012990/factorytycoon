@@ -9,16 +9,22 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
     Vector3 input;
+    Animator anim;
 
     void Awake(){
         rb = GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update(){
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         input = new Vector3(h, 0f, v).normalized;
+        
+        if (anim) {
+            anim.SetFloat("Speed", new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
+        }
     }
 
     void FixedUpdate(){

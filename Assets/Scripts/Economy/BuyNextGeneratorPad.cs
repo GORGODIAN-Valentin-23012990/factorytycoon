@@ -7,8 +7,9 @@ public class BuyNextGeneratorPad : MonoBehaviour
     public Wallet wallet;
     public GeneratorManager manager;
 
-    [Header("UI (optionnel)")]
-    public TMP_Text promptText;
+    [Header("UI")]
+    public GameObject promptRoot;
+    public TMP_Text prompt3dText;
 
     public KeyCode useKey = KeyCode.E;
 
@@ -18,7 +19,7 @@ public class BuyNextGeneratorPad : MonoBehaviour
         GetComponent<Collider>().isTrigger = true;
         if (!wallet) wallet = FindObjectOfType<Wallet>();
         if (!manager) manager = FindObjectOfType<GeneratorManager>();
-        if (promptText) promptText.gameObject.SetActive(false);
+        if (promptRoot) promptRoot.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other){
@@ -30,7 +31,7 @@ public class BuyNextGeneratorPad : MonoBehaviour
     void OnTriggerExit(Collider other){
         if (!other.CompareTag("Player")) return;
         inRange = false;
-        if (promptText) promptText.gameObject.SetActive(false);
+        if (promptRoot) promptRoot.gameObject.SetActive(false);
     }
 
     void Update(){
@@ -50,16 +51,16 @@ public class BuyNextGeneratorPad : MonoBehaviour
     }
 
     void RefreshPrompt(bool show){
-        if (!promptText || manager == null) return;
+        if (!promptRoot || !prompt3dText || manager == null) return;
 
         if (manager.IsMaxed()){
-            promptText.text = "Générateur: MAX";
-            promptText.gameObject.SetActive(show);
+            prompt3dText.text = "MAX";
+            promptRoot.gameObject.SetActive(show);
             return;
         }
 
         int cost = manager.GetNextCost();
-        promptText.text = $"E — Acheter générateur ({cost})";
-        if (show) promptText.gameObject.SetActive(true);
+        prompt3dText.text = $"{useKey} — Buy ({cost})";
+        if (show) promptRoot.gameObject.SetActive(true);
     }
 }
