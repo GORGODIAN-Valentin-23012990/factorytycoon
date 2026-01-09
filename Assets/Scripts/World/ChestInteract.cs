@@ -15,72 +15,103 @@ public class ChestInteract : MonoBehaviour
     public int rewardCoins = 200;
 
     [Header("Input")]
-    public KeyCode openKey = KeyCode.E;
+    public KeyCode claimKey = KeyCode.E;
+
+    [Header("Comportement")]
+    public bool autoOpen = true;
+    public bool autoCloseOnExit = true;
 
     bool inRange;
-    PlayerInventory currentInv;
     bool claimed;
+    bool panelOpen;
 
-    void Awake(){
+    PlayerInventory currentInv;
+
+    void Awake()
+    {
         GetComponent<Collider>().isTrigger = true;
 
         if (chestPanel) chestPanel.SetActive(false);
 
         if (!wallet) wallet = FindObjectOfType<Wallet>();
 
-        if (claimButton){
+        if (claimButton)
+        {
             claimButton.onClick.RemoveAllListeners();
             claimButton.onClick.AddListener(Claim);
         }
     }
 
-    void OnTriggerEnter(Collider other){
+    void OnTriggerEnter(Collider other)
+    {
         if (!other.CompareTag("Player")) return;
+
         inRange = true;
         currentInv = other.GetComponentInParent<PlayerInventory>();
+
+        if (!autoOpen) return;
+        TryOpenPanel();
     }
 
-    void OnTriggerExit(Collider other){
+    void OnTriggerExit(Collider other)
+    {
         if (!other.CompareTag("Player")) return;
+
         inRange = false;
         currentInv = null;
-        if (chestPanel) chestPanel.SetActive(false);
+
+        if (autoCloseOnExit) ClosePanel();
     }
 
-    void Update(){
-        if (!inRange || claimed) return;
+    void Update()
+    {
+        if (panelOpen && !claimed && Input.GetKeyDown(claimKey))
+        {
+            Claim();
+        }
+    }
+
+    void TryOpenPanel()
+    {
+        if (claimed) return;
+        if (!inRange) return;
         if (!currentInv || !currentInv.hasKey) return;
 
-        if (Input.GetKeyDown(openKey)){
-            OpenPanel();
-        }
+        OpenPanel();
     }
 
-    void OpenPanel(){
+    void OpenPanel()
+    {
         if (!chestPanel) return;
 
-        if (infoText){
-            infoText.text = $"Récompense : +{rewardCoins} coins\nClique sur Récupérer.";
-        }
-
         chestPanel.SetActive(true);
-
+        panelOpen = true;
+        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    void Claim(){
+    public void ClosePanel()
+    {
+        if (chestPanel) chestPanel.SetActive(false);
+        panelOpen = false;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    void Claim()
+    {
         if (claimed) return;
         if (!currentInv || !currentInv.hasKey) return;
-        
+
         if (wallet) wallet.Add(rewardCoins);
         currentInv.ConsumeKey();
 
         claimed = true;
 
-        if (chestPanel) chestPanel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        ClosePanel();
+
         gameObject.SetActive(false);
     }
 }
